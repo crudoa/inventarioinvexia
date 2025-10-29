@@ -26,46 +26,49 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // Ignorar rutas públicas: /api/auth/*
         String path = request.getRequestURI();
+        System.out.println("➡️ [Filtro JWT] Path: " + path);
+
+        // Saltar autenticación en /api/auth
         if (path.startsWith("/api/auth/")) {
+            System.out.println("🔹 [Filtro JWT] Petición pública, no requiere token");
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Encabezado Authorization
+        // Cabecera Authorization
         String authHeader = request.getHeader("Authorization");
+        System.out.println("🔹 [Filtro JWT] Header Authorization: " + authHeader);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("⚠️ [Filtro JWT] No hay token válido en cabecera");
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Extraer el token sin "Bearer "
         String token = authHeader.substring(7);
+        System.out.println("✅ [Filtro JWT] Token recibido: " + token);
 
-        // Validar el token
         if (!jwtUtil.validateToken(token)) {
+            System.out.println("❌ [Filtro JWT] Token inválido");
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Extraer el usuario del token
         String username = jwtUtil.extractUsername(token);
+        System.out.println("✅ [Filtro JWT] Token válido, usuario extraído: " + username);
 
-        // Crear un usuario autenticado sin roles específicos
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                new User(username, "", Collections.emptyList()),
-                null,
-                Collections.emptyList()
-        );
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        new User(username, "", Collections.emptyList()),
+                        null,
+                        Collections.emptyList()
+                );
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-        // Registrar autenticación en el contexto de seguridad
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Continuar con la cadena de filtros
+        System.out.println("🔐 [Filtro JWT] Usuario autenticado correctamente");
         filterChain.doFilter(request, response);
     }
 }
