@@ -26,28 +26,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        // Ignorar rutas públicas: /api/auth/*
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/auth/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // Encabezado Authorization
         String authHeader = request.getHeader("Authorization");
-
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Extrae el token sin "Bearer "
+        // Extraer el token sin "Bearer "
         String token = authHeader.substring(7);
 
-        // Valida el token
+        // Validar el token
         if (!jwtUtil.validateToken(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Extrae el usuario del token
+        // Extraer el usuario del token
         String username = jwtUtil.extractUsername(token);
 
-        // Crea un usuario autenticado sin roles específicos
+        // Crear un usuario autenticado sin roles específicos
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 new User(username, "", Collections.emptyList()),
                 null,
@@ -56,10 +62,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-        // Registra autenticación en el contexto de seguridad
+        // Registrar autenticación en el contexto de seguridad
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Continua con la cadena de filtros
+        // Continuar con la cadena de filtros
         filterChain.doFilter(request, response);
     }
 }
