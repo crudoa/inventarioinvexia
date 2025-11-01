@@ -2,42 +2,42 @@ package com.invexia.inventario.controller;
 
 import com.invexia.inventario.entity.ProductoEntity;
 import com.invexia.inventario.service.ProductoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class ProductoController {
 
     private final ProductoService productoService;
 
-    public ProductoController(ProductoService productoService) {
-        this.productoService = productoService;
-    }
-
-    @PostMapping
-    public ProductoEntity add(@RequestBody ProductoEntity producto) {
-        return productoService.add(producto);
-    }
-
-    @PutMapping("/{id}")
-    public ProductoEntity update(@PathVariable Long id, @RequestBody ProductoEntity producto) {
-        return productoService.update(id, producto);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        productoService.delete(id);
-    }
-
     @GetMapping
-    public List<ProductoEntity> listAll() {
-        return productoService.listAll();
+    public List<ProductoEntity> listar() {
+        return productoService.listarProductos();
     }
 
     @GetMapping("/{id}")
-    public ProductoEntity findById(@PathVariable Long id) {
-        return productoService.findById(id);
+    public ProductoEntity obtener(@PathVariable Long id) {
+        return productoService.obtenerPorId(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+    }
+
+    @PostMapping
+    public ProductoEntity crear(@RequestBody ProductoEntity producto) {
+        return productoService.crearProducto(producto);
+    }
+
+    @PutMapping("/{id}")
+    public ProductoEntity actualizar(@PathVariable Long id, @RequestBody ProductoEntity producto) {
+        return productoService.actualizarProducto(id, producto);
+    }
+
+    @DeleteMapping("/{id}")
+    public String eliminar(@PathVariable Long id) {
+        productoService.eliminarProducto(id);
+        return "Producto eliminado correctamente";
     }
 }

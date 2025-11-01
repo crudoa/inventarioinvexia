@@ -2,11 +2,12 @@ package com.invexia.inventario.service;
 
 import com.invexia.inventario.entity.ProductoEntity;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductoService {
-    ProductoEntity add(ProductoEntity producto);
-    ProductoEntity update(Long id, ProductoEntity producto);
-    void delete(Long id);
-    List<ProductoEntity> listAll();
-    ProductoEntity findById(Long id);
+    List<ProductoEntity> listarProductos();
+    Optional<ProductoEntity> obtenerPorId(Long id);
+    ProductoEntity crearProducto(ProductoEntity producto);
+    ProductoEntity actualizarProducto(Long id, ProductoEntity producto);
+    void eliminarProducto(Long id);
 }

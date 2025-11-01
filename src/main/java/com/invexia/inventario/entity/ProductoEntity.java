@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "producto")
+@Table(name = "productos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductoEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +23,11 @@ public class ProductoEntity {
     @Column(nullable = false)
     private Double precio;
 
-    @Column(nullable = false)
     private Integer stock;
 
-    private Boolean activo = true;
+    private Boolean activo;
+
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private CategoriaEntity categoria;
 }

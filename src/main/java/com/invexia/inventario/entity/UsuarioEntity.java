@@ -22,4 +22,6 @@ public class UsuarioEntity {
     private String password;
 
     private String rol;
+
+    private Boolean activo;
 }
