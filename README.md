@@ -1,17 +1,18 @@
-# 📦 Inventory Management API
+# 📦 Inventory Management System API
 
-Backend system for inventory management built with Java and Spring Boot.
+Secure and scalable backend API for inventory management built with Spring Boot.
 
-This project includes JWT authentication, RESTful endpoints, Docker containerization, and production-ready configuration.
+The system includes JWT authentication, role-based authorization, layered architecture, and Dockerized deployment.
 
 ---
 
 ## 🚀 Tech Stack
 
-- Java 17+
+- Java 17
 - Spring Boot
 - Spring Security
 - JWT Authentication
+- Spring Data JPA
 - Maven
 - Docker
 - Docker Compose
@@ -20,57 +21,46 @@ This project includes JWT authentication, RESTful endpoints, Docker containeriza
 
 ## ✨ Features
 
-- User authentication with JWT
-- Role-based authorization
-- RESTful API structure
-- Inventory CRUD operations
-- Dockerized deployment
-- Modular backend architecture
+- JWT-based authentication
+- Role-based access control
+- Full CRUD for:
+  - Products
+  - Categories
+  - Clients
+  - Providers
+  - Sales
+  - Purchases
+- Inventory movement tracking
+- Modular and layered architecture
+- Dockerized environment
 
 ---
 
 ## 🧠 Architecture
 
-- Layered architecture (Controller → Service → Repository)
-- JWT-based stateless authentication
-- Environment-based configuration
-- Containerized using Docker
+Layered architecture:
+
+Controller → Service → Repository → Database
+
+Security flow:
+
+JWT Filter → Security Config → Auth Controller
 
 ---
 
-## 📁 Project Structure
+## 🔐 Authentication Flow
+
+1. User logs in via `/auth/login`
+2. JWT token is generated
+3. Token must be included in headers:
 
 ```
-src/
- ├── controller/
- ├── service/
- ├── repository/
- ├── model/
- └── config/
-```
-
----
-
-## ⚙️ Running Locally
-
-### 1️⃣ Clone repository
-
-```bash
-git clone https://github.com/crudoa/inventarioinvexia.git
-cd inventarioinvexia
-```
-
-### 2️⃣ Run with Maven
-
-```bash
-./mvnw spring-boot:run
+Authorization: Bearer <token>
 ```
 
 ---
 
-## 🐳 Running with Docker
-
-Build and start containers:
+## 🐳 Run with Docker
 
 ```bash
 docker-compose up --build
@@ -78,28 +68,25 @@ docker-compose up --build
 
 ---
 
-## 🔐 Authentication
+## ⚙️ Run Locally
 
-Authentication is handled via JWT tokens.
-
-After login, include the token in the header:
-
-```
-Authorization: Bearer <your_token>
+```bash
+./mvnw spring-boot:run
 ```
 
 ---
 
 ## 🔮 Future Improvements
 
-- API documentation with Swagger
-- Database migration tool (Flyway)
+- Swagger/OpenAPI documentation
+- DTO layer separation
+- Global exception handling
+- Flyway database migrations
 - CI/CD pipeline
 - Cloud deployment (AWS / GCP)
-- Monitoring & logging
 
 ---
 
 ## 👨‍💻 crudoa
 
-Backend Developer focused on scalable APIs and secure authentication systems.
+Backend Developer focused on secure APIs and scalable backend architecture.
