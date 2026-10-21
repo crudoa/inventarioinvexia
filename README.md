@@ -1,8 +1,6 @@
 # 📦 Inventory Management System API
 
-Secure and scalable backend API for inventory management built with Spring Boot.
-
-The system includes JWT authentication, role-based authorization, layered architecture, and Dockerized deployment.
+Secure inventory management REST API built with Java 17 and Spring Boot. Features JWT authentication, role-based access control, full CRUD for products, categories, clients, providers, sales and purchases, and inventory movement tracking. Layered architecture, containerized with Docker Compose.
 
 ---
 
